@@ -1,0 +1,140 @@
+# 11 Tips and Tricks to Write Better Python Code
+# https://www.youtube.com/watch?v=8OKTAedgFYg
+import timeit as ti
+import sys
+import numpy as np
+
+## 1) Iterate with enumerate() instead of range(len())
+### Before
+data = np.random.random(5000000)
+start = ti.default_timer()
+for i in range(len(data)):
+    if data[i] < 0:
+        data[i] = 0
+end = ti.default_timer()
+print(round(end-start,7),'seconds')
+
+### After
+start = ti.default_timer()
+for idx, num in enumerate(data):
+    if num < 0:
+        data[idx] = 0
+end = ti.default_timer()      
+print(round(end-start,7),'seconds')
+
+
+
+## 2) Use list comprehensions instead of for loops
+### Before
+start = ti.default_timer()
+squares = []
+for i in range(10):
+    squares.append(i*i)
+print(squares)
+end = ti.default_timer()
+print(round(end-start,7),'seconds')
+
+### After
+start = ti.default_timer()
+squares = [i*i for i in range(10)]
+print(squares)
+end = ti.default_timer()      
+print(round(end-start,7),'seconds')
+
+
+
+## 3) Sort complex iterables with sorted()
+data = np.random.random(5000000)
+start = ti.default_timer()
+sorted_data = sorted(data, reverse=True)
+print(sorted_data)
+end = ti.default_timer()
+print(round(end-start,7),'seconds')
+
+data = [{'name': 'Max', 'age': 6}
+        , {'name': 'Lisa', 'age': 20}
+        , {'name': 'Ben', 'age': 9}]
+start = ti.default_timer()
+sorted_data = sorted(data, key=lambda x: x['age'])
+print(sorted_data)
+end = ti.default_timer()
+print(round(end-start,7),'seconds')
+
+
+
+### 4) Store unique valies with Sets
+my_list = [1,2,3,4,5,6,7,7,7]
+my_set = set(my_list)
+print(my_set)
+
+primes = {2,3,5,7,11,13,17,19}
+print(primes)
+
+
+
+### 5) Save memory with generators
+my_list = [i for i in range(5000000)]
+print(sum(my_list))
+print(sys.getsizeof(my_list),'bytes')
+
+my_gen = (i for i in range(5000000))
+print(sum(my_gen))
+print(sys.getsizeof(my_list),'bytes')
+
+
+
+### 6) Define default values in dictionaries with .get() and .setdefault()
+my_dict = {'item': 'football', 'price': 10.00}
+count = my_dict.get('count',0)
+print(count)
+
+count = my_dict.setdefault('count',0)
+print(count)
+print(my_dict)
+
+
+
+### 7) Count hashable objects with collections.Counter
+from collections import Counter
+
+my_list = [10,10,10,5,5,2,9,9,9,9,9,9,9,9]
+counter = Counter(my_list)
+
+most_common = counter.most_common(1)
+print(most_common[0])
+
+
+
+### 8) Format strings with f-strings
+name = 'Alex'
+my_string = f'Hello {name}'
+print(my_string)
+
+i = 10
+print(f'{i} squared is {i*i}')
+
+
+
+### 9) Concat string with .join()
+list_of_strings = ['hello', 'my', 'friend']
+
+#### Efficient method
+my_string = ' '.join(list_of_strings)
+print(my_string)
+
+
+
+### 10) Merge two dictionaries
+d1 = {'name': 'Alex', 'age': 25}
+d2 = {'name': 'Alex', 'city': 'New York'}
+merged_dict = {**d1, **d2}
+print(merged_dict)
+
+
+
+### 11) Simplify if statement for multiple checks
+colors = ['red', 'green', 'blue']
+
+c = 'red'
+if c in colors:
+    print('is main color')
